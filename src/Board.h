@@ -10,6 +10,7 @@ class board
 {
 public:
     enum class status { added, already_exists, invalid_argument };
+
     board(unsigned short width,
           unsigned short height,
           unsigned short queens)
@@ -33,6 +34,26 @@ public:
             return status::already_exists;
     }
 
+    void print() const
+    {
+        std::cout <<"  "; for (unsigned short w=0; w<width(); ++w) std::cout <<w; std::cout <<'\n';
+        std::cout <<" +"; for (unsigned short w=0; w<width(); ++w) std::cout <<'-'; std::cout <<"+\n";
+        for (unsigned short h=0; h<height(); ++h)
+        {
+            std::cout <<h <<'|'; 
+            for (unsigned short w=0; w<width(); ++w)
+            {
+                if (data_.find({h,w}) != data_.cend())
+                    std::cout <<'X';
+                else
+                    std::cout <<' ';
+            }
+            std::cout <<'|' <<h <<'\n'; 
+        }
+        std::cout <<" +"; for (unsigned short w=0; w<width(); ++w) std::cout <<'-'; std::cout <<"+\n";
+        std::cout <<"  "; for (unsigned short w=0; w<width(); ++w) std::cout <<w; std::cout <<'\n';
+    }
+
 private:
     bool already_placed_all_queens() const { return data_.size() == queens(); }
     bool invalid_width(unsigned short x) const { return x > width() - 1; }
@@ -40,7 +61,7 @@ private:
 
     struct queen_2d_position 
     { 
-        unsigned short x, y; 
+        unsigned short x{0}, y{0}; 
         bool operator<(queen_2d_position const& p) const 
         { 
             if (x < p.x)
